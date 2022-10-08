@@ -12,26 +12,34 @@ FILES_TO_PROCESS = ['reut2-000.sgm', 'reut2-001.sgm', 'reut2-002.sgm', 'reut2-00
                     'reut2-0012.sgm', 'reut2-0013.sgm', 'reut2-0014.sgm', 'reut2-0015.sgm', 'reut2-0016.sgm',
                     'reut2-0017.sgm', 'reut2-0018.sgm', 'reut2-0019.sgm', 'reut2-0020.sgm', 'reut2-0021.sgm']
 
+"""
+The following class is created in order to encode instances of a data type as a JSON object
+"""
+
 
 class SetEncoder(json.JSONEncoder):
     def default(self, obj):
+        # if instance of the object return json
         if isinstance(obj, set):
             return list(obj)
+        # if not encode it to json
         return json.JSONEncoder.default(self, obj)
+
+
+"""
+The following class will be used to develop a module that will process reuters21578 documents , accpet a list as tokens
+and output the terms while removing duplcated. Moreover, it will also sort the files and create a posting list of terms 
+in JSON format
+"""
 
 
 class indexer_processor:
     """
-    This function is used to read and clean the filenames while having a latin-1 encoded while also removing any lines
-    before and after the html tags.
-    @:param folder used to process the reuters21578 file directory
-    @:param files_to_process will be processing the first five selected fiels
-    """
-
-
-"""
-The function is used to tokenize each word found in the files using the ntlk.word_tokenize
-@:param lines used to read the lines of the files and tokenize each word 
+This function is used to read and clean the filenames while having a latin-1 encoded while also removing any lines
+before and after the html tags.
+@:param folder used to process the reuters21578 file directory
+@:param files_to_process will be processing the first five selected fiels
+@:return the pure sentences after removing the tags
 """
 
 
@@ -48,6 +56,13 @@ def process_readable_files(folder='reuters21578', files_to_process=FILES_TO_PROC
     return sentences
 
 
+"""
+This function is meant to lower case all the words in the files
+@:param words used to store the the words of the file in order to lowercase
+@:return a list of tokenized words from reutuers21578
+"""
+
+
 def tokenize(raw_text_files):
     tokens = []
     for i, file in enumerate(raw_text_files):
@@ -57,15 +72,11 @@ def tokenize(raw_text_files):
     return tokens
 
 
-"""Create a inverted index of words (tokens or terms) from a list of terms
-
-    Parameters:
-    words (list of str): tokenized document text
-
-    Returns:
-    Inverted index of document (dict)
-
-   """
+"""
+Create a inverted index of words (tokens or terms) from a list of terms
+@:param docs (list of str): tokenized document text
+@:return inverted index of sorted  documents
+"""
 
 
 def create_inverted_index(docs):
@@ -77,14 +88,24 @@ def create_inverted_index(docs):
             else:
                 inverted_index[term] = {docID}
 
+    # sort the inverted index terms
     inverted_index = OrderedDict(sorted(inverted_index.items()))
 
+    # create json file that will input the inverted index values
     raw = json.dumps(inverted_index, cls=SetEncoder)
 
-    with open('postings_list.json', 'w') as fp:
-        fp.write(str(raw))
+    # create posting files of invereted index to be stored
+    with open('postings_list.json', 'w') as file_handler:
+        file_handler.write(str(raw))
 
     return inverted_index
+
+
+"""
+Sort the terms of the inverted index found
+@:param inputs the index terms in the list 
+@:return a sorted inverted index posting 
+"""
 
 
 def sort(index_list):

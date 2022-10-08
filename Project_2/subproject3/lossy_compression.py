@@ -1,7 +1,17 @@
 import json
 
-from Project_2.subproject1.indexer_processor import indexer_processor
 from Project_2.subproject3 import lossy_compression_tools
+
+"""
+The following lossy_compression file will be used soley to compute len() of the lossy dictionary compression techniques
+while creating the table for Reuters-21578
+"""
+
+"""
+Compute lossy terms of each category
+@:param path of the posting_list.json 
+@:return the stats of each caterogy in numerical value
+"""
 
 
 def computeTermLossy(path):
@@ -31,6 +41,13 @@ def computeTermLossy(path):
     return stats
 
 
+"""
+Compute the frequency of each category in 
+@:param path of the posting_list.json 
+@:return the stats of each caterogy in numerical value
+"""
+
+
 def computeNPLossy(path):
     dictionary = dict()
     stats = dict()
@@ -58,6 +75,13 @@ def computeNPLossy(path):
     return stats
 
 
+"""
+Compress the terms in each category  
+@:param path of the posting_list.json 
+@:return the dic() value 
+"""
+
+
 def getCompressedDictionary(path):
     dictionary = dict()
     stats = dict()
@@ -72,6 +96,13 @@ def getCompressedDictionary(path):
     dictionary = lossy_compression_tools.stemming(dictionary)
 
     return dictionary
+
+
+"""
+Create informational table of words types, non-positional , positional postings
+@:param path of the posting_list.json 
+@:return the stats of each caterogy in numerical value
+"""
 
 
 def displayTable(path):
