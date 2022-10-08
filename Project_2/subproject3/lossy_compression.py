@@ -1,6 +1,7 @@
 import json
 
 from Project_2.subproject3 import lossy_compression_tools
+import pandas as pd
 
 """
 The following lossy_compression file will be used soley to compute len() of the lossy dictionary compression techniques
@@ -14,7 +15,7 @@ Compute lossy terms of each category
 """
 
 
-def computeTermLossy(path):
+def compute_term_lossy(path):
     dictionary = dict()
     stats = dict()
 
@@ -48,7 +49,7 @@ Compute the frequency of each category in
 """
 
 
-def computeNPLossy(path):
+def compute_non_propositional_lossy(path):
     dictionary = dict()
     stats = dict()
 
@@ -82,7 +83,7 @@ Compress the terms in each category
 """
 
 
-def getCompressedDictionary(path):
+def get_compressed_dictionary(path):
     dictionary = dict()
     stats = dict()
 
@@ -105,59 +106,73 @@ Create informational table of words types, non-positional , positional postings
 """
 
 
-def displayTable(path):
-    term_data = computeTermLossy(path)
-    np_data = computeNPLossy(path)
+def display_table(path):
+    term_data = compute_term_lossy(path)
+    np_data = compute_non_propositional_lossy(path)
 
-    print("\n\t\t\tTerms\t\tNP Postings")
-    print("-" * 60)
-    print("\t\tfreq\tΔ%\tT%\tfreq\tΔ%\tT%")
-    print("-" * 60)
+    print("-" * 80)
+    column_names = pd.DataFrame([["Terms", "Frequency"],
+                                 ["", "Δ%"],
+                                 ["", "T%"],
+                                 ["Non-Positional Postings", "Frequency"],
+                                 ["", "Δ%"],
+                                 ["", "T%"]],
+                                columns=["", ""])
 
-    print(f'unfiltered:\t{term_data["unfiltered"]}\t\t\t{np_data["unfiltered"]}')
 
-    delta_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["no_number"])
-    term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["no_number"])
-    delta_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["no_number"])
-    term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["no_number"])
-    print(
-        f'no numbers:\t{term_data["no_number"]}\t{delta_value_terms * -1 if delta_value_terms > 0 else delta_value_terms}\t'
-        f'{term_value_terms * -1 if term_value_terms > 0 else term_value_terms}\t{np_data["no_number"]}\t{delta_value_np * -1}\t'
-        f'{term_value_np * -1}')
 
-    delta_value_terms = lossy_compression_tools.delta(term_data["no_number"], term_data["case_folding"])
-    term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["case_folding"])
-    delta_value_np = lossy_compression_tools.delta(np_data["no_number"], np_data["case_folding"])
-    term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["case_folding"])
-    print(
-        f'case folding:\t{term_data["case_folding"]}\t{delta_value_terms * -1 if delta_value_terms > 0 else delta_value_terms}\t'
-        f'{term_value_terms * -1 if term_value_terms > 0 else term_value_terms}\t{np_data["case_folding"]}\t{delta_value_np * -1}\t'
-        f'{term_value_np * -1}')
+    no_num_delta_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["no_number"])
+    no_num_term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["no_number"])
+    no_num_delta_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["no_number"])
+    no_num_term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["no_number"])
 
-    delta_value_terms = lossy_compression_tools.delta(term_data["case_folding"], term_data["30_stopwords"])
-    term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["30_stopwords"])
-    delta_value_np = lossy_compression_tools.delta(np_data["case_folding"], np_data["30_stopwords"])
-    term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["30_stopwords"])
-    print(
-        f'30 stopwords:\t{term_data["30_stopwords"]}\t{delta_value_terms * -1 if delta_value_terms > 0 else delta_value_terms}\t'
-        f'{term_value_terms * -1 if term_value_terms > 0 else term_value_terms}\t{np_data["30_stopwords"]}\t{delta_value_np * -1}\t'
-        f'{term_value_np * -1}')
+    cf_delta_value_terms = lossy_compression_tools.delta(term_data["no_number"], term_data["case_folding"])
+    cf_term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["case_folding"])
+    cf_delta_value_np = lossy_compression_tools.delta(np_data["no_number"], np_data["case_folding"])
+    cf_term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["case_folding"])
 
-    delta_value_terms = lossy_compression_tools.delta(term_data["30_stopwords"], term_data["150_stopwords"])
-    term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["150_stopwords"])
-    delta_value_np = lossy_compression_tools.delta(np_data["30_stopwords"], np_data["150_stopwords"])
-    term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["150_stopwords"])
-    print(
-        f'150 stopwords:\t{term_data["150_stopwords"]}\t{delta_value_terms * -1 if delta_value_terms > 0 else delta_value_terms}\t'
-        f'{term_value_terms * -1 if term_value_terms > 0 else term_value_terms}\t{np_data["150_stopwords"]}\t{delta_value_np * -1}\t'
-        f'{term_value_np * -1}')
+    sw_delta_value_terms = lossy_compression_tools.delta(term_data["case_folding"], term_data["30_stopwords"])
+    sw_term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["30_stopwords"])
+    sw_delta_value_np = lossy_compression_tools.delta(np_data["case_folding"], np_data["30_stopwords"])
+    sw_term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["30_stopwords"])
 
-    delta_value_terms = lossy_compression_tools.delta(term_data["150_stopwords"], term_data["stemming"])
-    term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["stemming"])
-    delta_value_np = lossy_compression_tools.delta(np_data["150_stopwords"], np_data["stemming"])
-    term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["stemming"])
-    print(
-        f'stemming:\t{term_data["stemming"]}\t{delta_value_terms * -1 if delta_value_terms > 0 else delta_value_terms}\t'
-        f'{term_value_terms * -1 if term_value_terms > 0 else term_value_terms}\t{np_data["stemming"]}\t{delta_value_np * -1}\t'
-        f'{term_value_np * -1}')
-    print('\n')
+    sw150_delta_value_terms = lossy_compression_tools.delta(term_data["30_stopwords"], term_data["150_stopwords"])
+    sw150_term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["150_stopwords"])
+    sw150_delta_value_np = lossy_compression_tools.delta(np_data["30_stopwords"], np_data["150_stopwords"])
+    sw150_term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["150_stopwords"])
+
+    stem_delta_value_terms = lossy_compression_tools.delta(term_data["150_stopwords"], term_data["stemming"])
+    stem_term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["stemming"])
+    stem_delta_value_np = lossy_compression_tools.delta(np_data["150_stopwords"], np_data["stemming"])
+    stem_term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["stemming"])
+
+    rows = [[term_data["unfiltered"], "", "", np_data["unfiltered"], "", ""],
+            [term_data["no_number"],
+             no_num_delta_value_terms * -1 if no_num_delta_value_terms > 0 else no_num_delta_value_terms,
+             no_num_term_value_terms * -1 if no_num_term_value_terms > 0 else no_num_term_value_terms,
+             np_data["no_number"],
+             no_num_delta_value_np * -1, no_num_term_value_np * -1],
+            [term_data["case_folding"], cf_delta_value_terms * -1 if cf_delta_value_terms > 0 else cf_delta_value_terms,
+             cf_term_value_terms * -1 if cf_term_value_terms > 0 else cf_term_value_terms, np_data["case_folding"],
+             cf_delta_value_np * -1, cf_term_value_np * -1],
+            [term_data["30_stopwords"], sw_delta_value_terms * -1 if sw_delta_value_terms > 0 else sw_delta_value_terms,
+             sw_term_value_terms * -1 if sw_term_value_terms > 0 else sw_term_value_terms, np_data["30_stopwords"],
+             sw_delta_value_np * -1, sw_term_value_np * -1],
+            [term_data["150_stopwords"],
+             sw150_delta_value_terms * -1 if sw150_delta_value_terms > 0 else sw150_delta_value_terms,
+             sw150_term_value_terms * -1 if sw150_term_value_terms > 0 else sw150_term_value_terms,
+             np_data["150_stopwords"],
+             sw150_delta_value_np * -1, sw150_term_value_np * -1],
+            [term_data["stemming"],
+             stem_delta_value_terms * -1 if stem_delta_value_terms > 0 else stem_delta_value_terms,
+             stem_term_value_terms * -1 if stem_term_value_terms > 0 else stem_term_value_terms, np_data["stemming"],
+             stem_delta_value_np * -1, stem_term_value_np * -1]]
+
+    print("-" * 80)
+    columns = pd.MultiIndex.from_frame(column_names)
+
+    index = ["unfiltered:", "no_numbers:", "case_folding:", "30_stopwords:", "150_stopwords:", "stemming:"]
+
+    display_table_pd = pd.DataFrame(rows, columns=columns, index=index)
+    print(display_table_pd)
+    print("-" * 80)

@@ -44,16 +44,11 @@ This function is used to remove a list of stop words from the dictionary and ind
 def remove_stopwords(dictionary, num_words):
     stopwords = nltk.corpus.stopwords.words('english')
 
-    if num_words == 30:
-        for words in stopwords[:num_words]:
-            if words.lower() in dictionary:
-                del dictionary[words.lower()]
-    else:
-        for words in stopwords[30:num_words]:
-            if words.lower() in dictionary:
-                del dictionary[words.lower()]
+    for words in stopwords[:num_words]:
+        if words.lower() in dictionary:
+            del dictionary[words.lower()]
 
-    return dictionary
+            return dictionary
 
 
 """
@@ -99,6 +94,8 @@ def delta(prev, new):
 """
 Verify if the terms in the dictionary is a digit of either integers or floats 
 """
+
+
 def isDigit(x):
     try:
         float(x)

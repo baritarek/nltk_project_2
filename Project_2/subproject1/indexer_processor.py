@@ -1,16 +1,7 @@
 import json
 import os
 from collections import OrderedDict
-
-import nltk
 from nltk import RegexpTokenizer, word_tokenize
-
-FILES_TO_PROCESS = ['reut2-000.sgm', 'reut2-001.sgm', 'reut2-002.sgm', 'reut2-003.sgm', 'reut2-004.sgm',
-                    'reut2-005.sgm',
-                    'reut2-006.sgm', 'reut2-007.sgm', 'reut2-008.sgm', 'reut2-009.sgm', 'reut2-0010.sgm',
-                    'reut2-0011.sgm',
-                    'reut2-0012.sgm', 'reut2-0013.sgm', 'reut2-0014.sgm', 'reut2-0015.sgm', 'reut2-0016.sgm',
-                    'reut2-0017.sgm', 'reut2-0018.sgm', 'reut2-0019.sgm', 'reut2-0020.sgm', 'reut2-0021.sgm']
 
 """
 The following class is created in order to encode instances of a data type as a JSON object
@@ -43,9 +34,9 @@ before and after the html tags.
 """
 
 
-def process_readable_files(folder='reuters21578', files_to_process=FILES_TO_PROCESS):
+def process_readable_files(folder='reuters21578'):
     # loop files directory using os.listidir()
-    files = [f for f in os.listdir(folder) if f in files_to_process]
+    files = [f for f in os.listdir(folder) if f.endswith('.sgm')]
     sentences = []
     for file in files:
         get_pure_sentences = open(f'reuters21578/{file}', encoding='latin-1').read()
