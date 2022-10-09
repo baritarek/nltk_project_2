@@ -1,11 +1,15 @@
 import time
 
-from IPython.core.display_functions import display
+"""
+Tarek Bari
+40131955
+Project 2
+"""
 
 from Project_2.subproject1 import indexer_processor
 from Project_2.subproject2 import boolean_model
 import pprint
-from Project_2.subproject3 import lossy_compression_tools, lossy_compression
+from Project_2.subproject3 import lossy_dict, lossy_compression
 import pandas as pd
 
 PATH = 'postings_list.json'
@@ -21,15 +25,15 @@ if __name__ == "__main__":
 
     results = boolean_model.process_query()
 
-    fold = lossy_compression_tools.case_folding(index_list)
+    fold = lossy_dict.case_folding(index_list)
 
     print('Case Folding: ', len(fold))
 
-    unwanted_numbers = lossy_compression_tools.remove_numbers(index_list)
+    unwanted_numbers = lossy_dict.remove_numbers(index_list)
 
     print('Remove numbers: ', len(unwanted_numbers))
 
-    stem = lossy_compression_tools.stemming(index_list)
+    stem = lossy_dict.stemming(index_list)
 
     print('Stemming: ', len(stem))
 

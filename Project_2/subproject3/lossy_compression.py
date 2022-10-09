@@ -1,6 +1,6 @@
 import json
 
-from Project_2.subproject3 import lossy_compression_tools
+from Project_2.subproject3 import lossy_dict
 import pandas as pd
 
 """
@@ -24,19 +24,19 @@ def compute_term_lossy(path):
 
     stats["unfiltered"] = len(dictionary)
 
-    dictionary = lossy_compression_tools.remove_numbers(dictionary)
+    dictionary = lossy_dict.remove_numbers(dictionary)
     stats["no_number"] = len(dictionary)
 
-    dictionary = lossy_compression_tools.case_folding(dictionary)
+    dictionary = lossy_dict.case_folding(dictionary)
     stats["case_folding"] = len(dictionary)
 
-    dictionary = lossy_compression_tools.remove_stopwords(dictionary, 30)
+    dictionary = lossy_dict.remove_stopwords(dictionary, 30)
     stats["30_stopwords"] = len(dictionary)
 
-    dictionary = lossy_compression_tools.remove_stopwords(dictionary, 150)
+    dictionary = lossy_dict.remove_stopwords(dictionary, 150)
     stats["150_stopwords"] = len(dictionary)
 
-    dictionary = lossy_compression_tools.stemming(dictionary)
+    dictionary = lossy_dict.stemming(dictionary)
     stats["stemming"] = len(dictionary)
 
     return stats
@@ -56,22 +56,22 @@ def compute_non_propositional_lossy(path):
     with open(path, 'r') as json_file:
         dictionary = json.load(json_file)
 
-    stats["unfiltered"] = lossy_compression_tools.frequency(dictionary)
+    stats["unfiltered"] = lossy_dict.frequency(dictionary)
 
-    dictionary = lossy_compression_tools.remove_numbers(dictionary)
-    stats["no_number"] = lossy_compression_tools.frequency(dictionary)
+    dictionary = lossy_dict.remove_numbers(dictionary)
+    stats["no_number"] = lossy_dict.frequency(dictionary)
 
-    dictionary = lossy_compression_tools.case_folding(dictionary)
-    stats["case_folding"] = lossy_compression_tools.frequency(dictionary)
+    dictionary = lossy_dict.case_folding(dictionary)
+    stats["case_folding"] = lossy_dict.frequency(dictionary)
 
-    dictionary = lossy_compression_tools.remove_stopwords(dictionary, 30)
-    stats["30_stopwords"] = lossy_compression_tools.frequency(dictionary)
+    dictionary = lossy_dict.remove_stopwords(dictionary, 30)
+    stats["30_stopwords"] = lossy_dict.frequency(dictionary)
 
-    dictionary = lossy_compression_tools.remove_stopwords(dictionary, 150)
-    stats["150_stopwords"] = lossy_compression_tools.frequency(dictionary)
+    dictionary = lossy_dict.remove_stopwords(dictionary, 150)
+    stats["150_stopwords"] = lossy_dict.frequency(dictionary)
 
-    dictionary = lossy_compression_tools.stemming(dictionary)
-    stats["stemming"] = lossy_compression_tools.frequency(dictionary)
+    dictionary = lossy_dict.stemming(dictionary)
+    stats["stemming"] = lossy_dict.frequency(dictionary)
 
     return stats
 
@@ -90,11 +90,11 @@ def get_compressed_dictionary(path):
     with open(path, 'r') as json_file:
         dictionary = json.load(json_file)
 
-    dictionary = lossy_compression_tools.remove_numbers(dictionary)
-    dictionary = lossy_compression_tools.case_folding(dictionary)
-    dictionary = lossy_compression_tools.remove_stopwords(dictionary, 30)
-    dictionary = lossy_compression_tools.remove_stopwords(dictionary, 150)
-    dictionary = lossy_compression_tools.stemming(dictionary)
+    dictionary = lossy_dict.remove_numbers(dictionary)
+    dictionary = lossy_dict.case_folding(dictionary)
+    dictionary = lossy_dict.remove_stopwords(dictionary, 30)
+    dictionary = lossy_dict.remove_stopwords(dictionary, 150)
+    dictionary = lossy_dict.stemming(dictionary)
 
     return dictionary
 
@@ -119,32 +119,30 @@ def display_table(path):
                                  ["", "T%"]],
                                 columns=["", ""])
 
+    no_num_delta_value_terms = lossy_dict.delta(term_data["unfiltered"], term_data["no_number"])
+    no_num_term_value_terms = lossy_dict.delta(term_data["unfiltered"], term_data["no_number"])
+    no_num_delta_value_np = lossy_dict.delta(np_data["unfiltered"], np_data["no_number"])
+    no_num_term_value_np = lossy_dict.delta(np_data["unfiltered"], np_data["no_number"])
 
+    cf_delta_value_terms = lossy_dict.delta(term_data["no_number"], term_data["case_folding"])
+    cf_term_value_terms = lossy_dict.delta(term_data["unfiltered"], term_data["case_folding"])
+    cf_delta_value_np = lossy_dict.delta(np_data["no_number"], np_data["case_folding"])
+    cf_term_value_np = lossy_dict.delta(np_data["unfiltered"], np_data["case_folding"])
 
-    no_num_delta_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["no_number"])
-    no_num_term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["no_number"])
-    no_num_delta_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["no_number"])
-    no_num_term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["no_number"])
+    sw_delta_value_terms = lossy_dict.delta(term_data["case_folding"], term_data["30_stopwords"])
+    sw_term_value_terms = lossy_dict.delta(term_data["unfiltered"], term_data["30_stopwords"])
+    sw_delta_value_np = lossy_dict.delta(np_data["case_folding"], np_data["30_stopwords"])
+    sw_term_value_np = lossy_dict.delta(np_data["unfiltered"], np_data["30_stopwords"])
 
-    cf_delta_value_terms = lossy_compression_tools.delta(term_data["no_number"], term_data["case_folding"])
-    cf_term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["case_folding"])
-    cf_delta_value_np = lossy_compression_tools.delta(np_data["no_number"], np_data["case_folding"])
-    cf_term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["case_folding"])
+    sw150_delta_value_terms = lossy_dict.delta(term_data["30_stopwords"], term_data["150_stopwords"])
+    sw150_term_value_terms = lossy_dict.delta(term_data["unfiltered"], term_data["150_stopwords"])
+    sw150_delta_value_np = lossy_dict.delta(np_data["30_stopwords"], np_data["150_stopwords"])
+    sw150_term_value_np = lossy_dict.delta(np_data["unfiltered"], np_data["150_stopwords"])
 
-    sw_delta_value_terms = lossy_compression_tools.delta(term_data["case_folding"], term_data["30_stopwords"])
-    sw_term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["30_stopwords"])
-    sw_delta_value_np = lossy_compression_tools.delta(np_data["case_folding"], np_data["30_stopwords"])
-    sw_term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["30_stopwords"])
-
-    sw150_delta_value_terms = lossy_compression_tools.delta(term_data["30_stopwords"], term_data["150_stopwords"])
-    sw150_term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["150_stopwords"])
-    sw150_delta_value_np = lossy_compression_tools.delta(np_data["30_stopwords"], np_data["150_stopwords"])
-    sw150_term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["150_stopwords"])
-
-    stem_delta_value_terms = lossy_compression_tools.delta(term_data["150_stopwords"], term_data["stemming"])
-    stem_term_value_terms = lossy_compression_tools.delta(term_data["unfiltered"], term_data["stemming"])
-    stem_delta_value_np = lossy_compression_tools.delta(np_data["150_stopwords"], np_data["stemming"])
-    stem_term_value_np = lossy_compression_tools.delta(np_data["unfiltered"], np_data["stemming"])
+    stem_delta_value_terms = lossy_dict.delta(term_data["150_stopwords"], term_data["stemming"])
+    stem_term_value_terms = lossy_dict.delta(term_data["unfiltered"], term_data["stemming"])
+    stem_delta_value_np = lossy_dict.delta(np_data["150_stopwords"], np_data["stemming"])
+    stem_term_value_np = lossy_dict.delta(np_data["unfiltered"], np_data["stemming"])
 
     rows = [[term_data["unfiltered"], "", "", np_data["unfiltered"], "", ""],
             [term_data["no_number"],

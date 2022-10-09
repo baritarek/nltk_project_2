@@ -26,7 +26,7 @@ def process_query():
         dictionary = json.load(json_file)
 
     # create query file of resutls in dictionary
-    with open("querySamples.json", 'a', encoding='utf-8') as outputFile:
+    with open("query_samples.json", 'a', encoding='utf-8') as outputFile:
         if query not in dictionary:
             print("Term not found!")
             exit()

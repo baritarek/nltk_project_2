@@ -48,8 +48,7 @@ def process_readable_files(folder='reuters21578'):
 
 
 """
-This function is meant to lower case all the words in the files
-@:param words used to store the the words of the file in order to lowercase
+Tokenize the words in Reuteurs21578
 @:return a list of tokenized words from reutuers21578
 """
 

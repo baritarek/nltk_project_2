@@ -14,7 +14,7 @@ from os import path
 def frequency(dictionary):
     val = 0
     for keys in dictionary.keys():
-        val += dictionary[keys][0]
+        val += len(dictionary[keys])
     return val
 
 
